@@ -25,14 +25,11 @@ public class PersonaController : Controller
     [HttpPost("{id}")]
     public ActionResult<Persona> UploadImage(int id, IFormFile? file)
     {
-        if (file is {Length: > 0})
-        {
-            return new ObjectResult(_personaRepository.UploadFile(id, file))
-                {StatusCode = StatusCodes.Status201Created};
-        }
-        Dictionary<String, Object> errors = new Dictionary<string, object>();
-        
-        return BadRequest("fie3 cam't be null");
+        if(file == null || file.Length > 0) return BadRequest("error uploading the file");
+        Persona persona = _personaRepository.UploadFile(id, file);
+        if (persona == null) return NotFound();
+        return new ObjectResult(_personaRepository.UploadFile(id, file))
+            {StatusCode = StatusCodes.Status201Created};
     }
 
     [HttpGet]
@@ -46,7 +43,7 @@ public class PersonaController : Controller
     { 
         Persona persona = _personaRepository.Find(id);
         if (persona != null) return Ok(persona);
-        return NotFound("the person was not found");
+        return NotFound();
     }
 
     [HttpDelete]
@@ -60,6 +57,7 @@ public class PersonaController : Controller
     [HttpDelete("{id}")]
     public ActionResult<HttpStatusCode> DeletePersonById(int id)
     {
+        if (_personaRepository.Find(id) == null) return NotFound();
         _personaRepository.DeletePersonById(id);
         return NoContent(); 
     }
@@ -73,10 +71,10 @@ public class PersonaController : Controller
     [HttpGet("imagen/{id}")]
     public ActionResult ShowImage(int id)
     {
-        if (_personaRepository.GetAvatar(id) == null)
-        {
-            return NoContent();
-        }
-        return File(_personaRepository.GetAvatar(id), "image/jpg");
+        Persona image = _personaRepository.Find(id);
+        if (image == null) return NotFound();
+        if (image.AvatarHashCode == 0) return NoContent();
+        return File(image.Avatar, "image/jpg");
+        
     }
 }

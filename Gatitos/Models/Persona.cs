@@ -10,11 +10,15 @@ public class Persona
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PersonaId { get; set; }
     
-    [MinLength(5)]
     public string Nombre { get; set; }
     
-    [MaxLength(15)]
+    public string Apellido { get; set; }
+    
+    [MaxLength(30)]
     public string Trabajo { get; set; }
+    
+    [EmailAddress]
+    public string Email { get; set; }
     
     public DateTime Nacimiento { get; set; }
     

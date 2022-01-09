@@ -1,6 +1,5 @@
 using Gatitos.Context;
 using Gatitos.Models;
-using Microsoft.Extensions.FileSystemGlobbing;
 
 namespace Gatitos.Repository;
 
@@ -51,7 +50,7 @@ public class PersonaRepository : IPersonaRepository
         return personaUpdate;
     }
 
-    public Persona UploadFile(int id, IFormFile? file)
+    public Persona UploadFile(int id, IFormFile file)
     {
         Persona persona = Find(id);
         using (var target = new MemoryStream())
@@ -67,6 +66,7 @@ public class PersonaRepository : IPersonaRepository
     public byte[]? GetAvatar(int personaId)
     {
         Persona persona = Find(personaId);
+        if (persona == null) return null;
         return persona.Avatar;
     }
 }

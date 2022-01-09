@@ -7,7 +7,6 @@ public interface IGatitoContext
 {
     
     DbSet<Persona> Personas { get; set; }
-    DbSet<Gato> Gatos { get; set; }
     
     int SaveChanges();
     
