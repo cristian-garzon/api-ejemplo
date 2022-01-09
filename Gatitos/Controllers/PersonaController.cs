@@ -1,8 +1,6 @@
 using System.Net;
-using System.Reflection.Metadata.Ecma335;
 using Gatitos.Models;
 using Gatitos.Repository;
-using System.Web;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gatitos.Controllers;
@@ -19,53 +17,60 @@ public class PersonaController : Controller
     }
 
     [HttpPost]
-    public ActionResult<Persona?> Save([FromBody] Persona persona)
+    public ActionResult<Persona> Save([FromBody] Persona persona)
     {
         return new ObjectResult(_personaRepository.AddPersona(persona)) {StatusCode = StatusCodes.Status201Created};
     }
 
     [HttpPost("{id}")]
-    public Persona UploadImage(int id, IFormFile? file)
+    public ActionResult<Persona> UploadImage(int id, IFormFile? file)
     {
-        if (file != null)
+        if (file is {Length: > 0})
         {
-            return _personaRepository.UploadFile(id, file);
+            return new ObjectResult(_personaRepository.UploadFile(id, file))
+                {StatusCode = StatusCodes.Status201Created};
         }
-        return null;
+        Dictionary<String, Object> errors = new Dictionary<string, object>();
+        
+        return BadRequest("fie3 cam't be null");
     }
 
     [HttpGet]
-    public List<Persona> ListPersonas()
+    public ActionResult<List<Persona>> ListPersonas()
     {
-        return _personaRepository.ListPersonas();
+        return Ok(_personaRepository.ListPersonas());
     }
 
     [HttpGet("{id}")]
-    public Persona Find(int id)
-    {
-        return _personaRepository.Find(id);
+    public ActionResult<Persona> Find(int id)
+    { 
+        Persona persona = _personaRepository.Find(id);
+        if (persona != null) return Ok(persona);
+        return NotFound("the person was not found");
     }
 
     [HttpDelete]
-    public void DeletePerson([FromBody] Persona persona)
+    public ActionResult<HttpStatusCode> DeletePerson([FromBody] Persona persona)
     {
         _personaRepository.DeletePerson(persona);
+        return NoContent(); 
     }
 
 
     [HttpDelete("{id}")]
-    public void DeletePersonById(int id)
+    public ActionResult<HttpStatusCode> DeletePersonById(int id)
     {
         _personaRepository.DeletePersonById(id);
+        return NoContent(); 
     }
 
     [HttpPut]
-    public Persona Update([FromBody] Persona persona)
+    public ActionResult<Persona> Update([FromBody] Persona persona)
     {
         return _personaRepository.Update(persona);
     }
 
-    [HttpGet("/image/{id}")]
+    [HttpGet("imagen/{id}")]
     public ActionResult ShowImage(int id)
     {
         if (_personaRepository.GetAvatar(id) == null)

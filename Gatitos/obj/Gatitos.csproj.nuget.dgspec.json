@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "E:\\curso-asp-net\\Api\\Gatitos\\Gatitos.csproj": {}
+    "/home/cristian/Documentos/programacion/c-sharp/api-ejemplo/Gatitos/Gatitos.csproj": {}
   },
   "projects": {
-    "E:\\curso-asp-net\\Api\\Gatitos\\Gatitos.csproj": {
+    "/home/cristian/Documentos/programacion/c-sharp/api-ejemplo/Gatitos/Gatitos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\curso-asp-net\\Api\\Gatitos\\Gatitos.csproj",
+        "projectUniqueName": "/home/cristian/Documentos/programacion/c-sharp/api-ejemplo/Gatitos/Gatitos.csproj",
         "projectName": "Gatitos",
-        "projectPath": "E:\\curso-asp-net\\Api\\Gatitos\\Gatitos.csproj",
-        "packagesPath": "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\e",
-        "outputPath": "E:\\curso-asp-net\\Api\\Gatitos\\obj\\",
+        "projectPath": "/home/cristian/Documentos/programacion/c-sharp/api-ejemplo/Gatitos/Gatitos.csproj",
+        "packagesPath": "/home/cristian/.nuget/packages/",
+        "outputPath": "/home/cristian/Documentos/programacion/c-sharp/api-ejemplo/Gatitos/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/cristian/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -73,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
         }
       }
     }

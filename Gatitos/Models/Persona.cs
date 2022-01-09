@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Gatitos.Context;
-using Gatitos.Migrations;
 
 namespace Gatitos.Models;
 
@@ -20,9 +18,16 @@ public class Persona
     
     public DateTime Nacimiento { get; set; }
     
-    
     [JsonIgnore]
     public byte[]? Avatar { get; set; }
     
+    [NotMapped]
+    public int AvatarHashCode {
+        get
+        {
+            if (Avatar != null) return Avatar.GetHashCode();
+            return 0;
+        }
+    }
     
 }

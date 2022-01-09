@@ -41,7 +41,7 @@ public class PersonaRepository : IPersonaRepository
 
     public Persona Find(int personaId)
     {
-        return _gatitoContext.Personas.Where(p => p.PersonaId == personaId).First();
+        return _gatitoContext.Personas.Where(p => p.PersonaId == personaId).FirstOrDefault();
     }
 
     public Persona Update(Persona persona)
