@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatitos.Migrations
 {
     [DbContext(typeof(GatitoContext))]
-    [Migration("20220107144554_add-table-person")]
-    partial class addtableperson
+    [Migration("20220108210731_fix-avatar")]
+    partial class fixavatar
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,26 @@ namespace Gatitos.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Gatitos.Models.Gato", b =>
+                {
+                    b.Property<int>("GatoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GatoId"), 1L, 1);
+
+                    b.Property<int>("Años")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Raza")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GatoId");
+
+                    b.ToTable("Gatos");
+                });
+
             modelBuilder.Entity("Gatitos.Models.Persona", b =>
                 {
                     b.Property<int>("PersonaId")
@@ -31,6 +51,10 @@ namespace Gatitos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonaId"), 1L, 1);
+
+                    b.Property<byte[]>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("Nacimiento")
                         .HasColumnType("datetime2");

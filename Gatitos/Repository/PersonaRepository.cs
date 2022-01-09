@@ -1,11 +1,13 @@
 using Gatitos.Context;
 using Gatitos.Models;
+using Microsoft.Extensions.FileSystemGlobbing;
 
 namespace Gatitos.Repository;
 
 public class PersonaRepository : IPersonaRepository
 {
     private readonly IGatitoContext _gatitoContext;
+    
 
     public PersonaRepository(IGatitoContext gatitoContext)
     {
@@ -47,5 +49,24 @@ public class PersonaRepository : IPersonaRepository
         Persona personaUpdate = _gatitoContext.Personas.Update(persona).Entity;
         _gatitoContext.SaveChanges();
         return personaUpdate;
+    }
+
+    public Persona UploadFile(int id, IFormFile? file)
+    {
+        Persona persona = Find(id);
+        using (var target = new MemoryStream())
+        {
+            file.CopyTo(target);
+            persona.Avatar = target.ToArray();
+        }
+        Update(persona);
+        return persona;
+    }
+
+
+    public byte[]? GetAvatar(int personaId)
+    {
+        Persona persona = Find(personaId);
+        return persona.Avatar;
     }
 }

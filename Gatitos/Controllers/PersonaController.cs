@@ -1,5 +1,8 @@
+using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using Gatitos.Models;
 using Gatitos.Repository;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gatitos.Controllers;
@@ -16,9 +19,19 @@ public class PersonaController : Controller
     }
 
     [HttpPost]
-    public Persona Save([FromBody] Persona persona)
+    public ActionResult<Persona?> Save([FromBody] Persona persona)
     {
-        return _personaRepository.AddPersona(persona);
+        return new ObjectResult(_personaRepository.AddPersona(persona)) {StatusCode = StatusCodes.Status201Created};
+    }
+
+    [HttpPost("{id}")]
+    public Persona UploadImage(int id, IFormFile? file)
+    {
+        if (file != null)
+        {
+            return _personaRepository.UploadFile(id, file);
+        }
+        return null;
     }
 
     [HttpGet]
@@ -36,19 +49,29 @@ public class PersonaController : Controller
     [HttpDelete]
     public void DeletePerson([FromBody] Persona persona)
     {
-        _personaRepository.DeletePerson(persona);        
+        _personaRepository.DeletePerson(persona);
     }
-    
-    
+
+
     [HttpDelete("{id}")]
     public void DeletePersonById(int id)
     {
-        _personaRepository.DeletePersonById(id);        
+        _personaRepository.DeletePersonById(id);
     }
 
     [HttpPut]
     public Persona Update([FromBody] Persona persona)
     {
         return _personaRepository.Update(persona);
+    }
+
+    [HttpGet("/image/{id}")]
+    public ActionResult ShowImage(int id)
+    {
+        if (_personaRepository.GetAvatar(id) == null)
+        {
+            return NoContent();
+        }
+        return File(_personaRepository.GetAvatar(id), "image/jpg");
     }
 }

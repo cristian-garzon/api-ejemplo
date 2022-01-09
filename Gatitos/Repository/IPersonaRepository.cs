@@ -10,4 +10,7 @@ public interface IPersonaRepository
     List<Persona> ListPersonas();
     Persona Find(int personaId);
     Persona Update(Persona persona);
+    Persona UploadFile(int id, IFormFile? file);
+
+    byte[]? GetAvatar(int personaId);
 }
