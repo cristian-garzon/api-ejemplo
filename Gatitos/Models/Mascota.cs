@@ -34,5 +34,7 @@ public class Mascota
         }
     }
     
-    
+    public ICollection<vacuna>? Vacunas { get; set; }
+
+
 }

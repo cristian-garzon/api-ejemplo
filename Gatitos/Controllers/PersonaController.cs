@@ -25,7 +25,7 @@ public class PersonaController : Controller
     [HttpPost("{id}")]
     public ActionResult<Persona> UploadImage(int id, IFormFile? file)
     {
-        if (file == null || file.Length < 0) return BadRequest("error uploading the file");
+        if (file == null || file.Length > 0) return BadRequest("error uploading the file");
         Persona persona = _personaRepository.UploadFile(id, file);
         if (persona == null) return NotFound();
         return new ObjectResult(persona)

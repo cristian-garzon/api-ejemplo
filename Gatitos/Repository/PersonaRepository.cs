@@ -48,7 +48,10 @@ public class PersonaRepository : IPersonaRepository
 
     public Persona Find(int personaId)
     {
-        return _gatitoContext.Personas.Find(personaId);
+        Persona persona = _gatitoContext.Personas.Find(personaId);
+        persona.Mascotas = _gatitoContext.Mascotas.Select(m => m)
+            .Where(m => m.PersonaId == persona.PersonaId).ToList();
+        return persona;
     }
 
     public Persona Update(Persona persona)

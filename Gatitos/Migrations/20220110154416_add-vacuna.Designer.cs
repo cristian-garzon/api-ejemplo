@@ -4,6 +4,7 @@ using Gatitos.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatitos.Migrations
 {
     [DbContext(typeof(GatitoContext))]
-    partial class GatitoContextModelSnapshot : ModelSnapshot
+    [Migration("20220110154416_add-vacuna")]
+    partial class addvacuna
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,7 +117,7 @@ namespace Gatitos.Migrations
 
                     b.HasIndex("MascotaId");
 
-                    b.ToTable("Vacunas");
+                    b.ToTable("vacuna");
                 });
 
             modelBuilder.Entity("Gatitos.Models.Mascota", b =>

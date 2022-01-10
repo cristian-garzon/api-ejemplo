@@ -1,28 +1,17 @@
+using System.Reflection.Metadata.Ecma335;
 using Gatitos.Context;
 using Gatitos.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gatitos.Repository;
 
 public class MascotaRepository : IMascotaRepository
 {
-
     private readonly IGatitoContext _gatitoContext;
 
 
     public MascotaRepository(IGatitoContext gatitoContext)
     {
         _gatitoContext = gatitoContext;
-    }
-
-    public Mascota AddMascota(Mascota mascota)
-    {
-        Persona persona = _gatitoContext.Personas.Find(mascota.PersonaId);
-        if (persona == null) return null;
-        mascota.Persona = persona;
-        Mascota mascotaCreated = _gatitoContext.Mascotas.Add(mascota).Entity; 
-        _gatitoContext.SaveChanges();
-        return mascotaCreated;
     }
 
     public void DeleteMascota(Mascota mascota)
@@ -40,29 +29,41 @@ public class MascotaRepository : IMascotaRepository
 
     public List<Mascota> ListMascotas()
     {
-        return _gatitoContext.Mascotas.Select(m => m).ToList();
+        List<Mascota> mascotas = _gatitoContext.Mascotas.Select(m => m).ToList();
+        foreach (var mascota in mascotas)
+        {
+            mascota.Vacunas = _gatitoContext.Vacunas.Select(v => v)
+                .Where(m => m.MascotaId == mascota.MascotaId).ToList();
+        }
+
+        return mascotas;
     }
 
     public Mascota Find(int mascotaId)
     {
-        return _gatitoContext.Mascotas.Find(mascotaId);
+        Mascota? mascota = _gatitoContext.Mascotas.Find(mascotaId);
+        if (mascota == null) return null;
+        mascota.Vacunas = _gatitoContext.Vacunas.Select(v => v)
+            .Where(m => m.MascotaId == mascota.MascotaId).ToList();
+        return mascota;
     }
 
     public Mascota Update(Mascota mascota)
     {
-        Mascota mascotaUpdate = _gatitoContext.Mascotas.Update(mascota).Entity; 
+        Mascota mascotaUpdate = _gatitoContext.Mascotas.Update(mascota).Entity;
         _gatitoContext.SaveChanges();
         return mascotaUpdate;
     }
 
     public Mascota UploadFile(int id, IFormFile? file)
     {
-        Mascota mascota =  Find(id);
+        Mascota mascota = Find(id);
         using (var target = new MemoryStream())
         {
             file.CopyTo(target);
             mascota.Foto = target.ToArray();
         }
+
         return Update(mascota);
     }
 
@@ -71,5 +72,41 @@ public class MascotaRepository : IMascotaRepository
         Mascota mascota = Find(mascotaId);
         if (mascota == null) return null;
         return mascota.Foto;
+    }
+
+    public void DeleteVacunaById(int vacunaId)
+    {
+        vacuna vacuna = FindVacuna(vacunaId);
+        _gatitoContext.Vacunas.Remove(vacuna);
+        _gatitoContext.SaveChanges();
+    }
+
+    public vacuna FindVacuna(int id)
+    {
+        return _gatitoContext.Vacunas.Find(id);
+    }
+
+    public vacuna Update(vacuna vacunaRequest)
+    {
+        vacuna vacunaUpdate = _gatitoContext.Vacunas.Update(vacunaRequest).Entity;
+        _gatitoContext.SaveChanges();
+        return vacunaUpdate;
+    }
+
+    public List<vacuna> ListVacunas()
+    {
+        return _gatitoContext.Vacunas.Select(v => v).ToList();
+    }
+
+    public Mascota? AddVacuna(List<vacuna> vacunas, int mascotaId)
+    {
+        Mascota mascota = Find(mascotaId);
+        if (mascota == null) return null;
+        foreach (var vacuna in vacunas)
+        {
+            mascota.Vacunas.Add(vacuna);
+        }
+
+        return Update(mascota);
     }
 }

@@ -8,6 +8,7 @@ public interface IGatitoContext
     
     DbSet<Persona> Personas { get; set; }
     public DbSet<Mascota> Mascotas { get; set; }
+    public DbSet<vacuna> Vacunas { get; set; }
     
     int SaveChanges();
     
