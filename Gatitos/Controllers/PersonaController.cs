@@ -25,10 +25,10 @@ public class PersonaController : Controller
     [HttpPost("{id}")]
     public ActionResult<Persona> UploadImage(int id, IFormFile? file)
     {
-        if(file == null || file.Length > 0) return BadRequest("error uploading the file");
+        if (file == null || file.Length < 0) return BadRequest("error uploading the file");
         Persona persona = _personaRepository.UploadFile(id, file);
         if (persona == null) return NotFound();
-        return new ObjectResult(_personaRepository.UploadFile(id, file))
+        return new ObjectResult(persona)
             {StatusCode = StatusCodes.Status201Created};
     }
 
@@ -40,7 +40,7 @@ public class PersonaController : Controller
 
     [HttpGet("{id}")]
     public ActionResult<Persona> Find(int id)
-    { 
+    {
         Persona persona = _personaRepository.Find(id);
         if (persona != null) return Ok(persona);
         return NotFound();
@@ -50,7 +50,7 @@ public class PersonaController : Controller
     public ActionResult<HttpStatusCode> DeletePerson([FromBody] Persona persona)
     {
         _personaRepository.DeletePerson(persona);
-        return NoContent(); 
+        return NoContent();
     }
 
 
@@ -59,7 +59,7 @@ public class PersonaController : Controller
     {
         if (_personaRepository.Find(id) == null) return NotFound();
         _personaRepository.DeletePersonById(id);
-        return NoContent(); 
+        return NoContent();
     }
 
     [HttpPut]
@@ -75,6 +75,22 @@ public class PersonaController : Controller
         if (image == null) return NotFound();
         if (image.AvatarHashCode == 0) return NoContent();
         return File(image.Avatar, "image/jpg");
-        
     }
+
+
+    [HttpPut("{id}")]
+    public ActionResult AddMascotas([FromBody] List<Mascota> mascotas, int id)
+    {
+        Persona persona = _personaRepository.Find(id);
+        if (persona == null) return NotFound();
+        if (persona.Mascotas == null || persona.Mascotas.Count < 0) persona.Mascotas = new List<Mascota>();
+        foreach (var mascota in mascotas)
+        {
+           persona.Mascotas.Add(mascota); 
+        }
+        Persona personaCreada = _personaRepository.Update(persona);
+        return new ObjectResult(personaCreada)
+            {StatusCode = StatusCodes.Status201Created};
+    }
+
 }

@@ -24,6 +24,7 @@ builder.Services.AddSwaggerGen(s => s.SwaggerDoc("v1", new OpenApiInfo
 builder.Services.AddTransient<IGatitoContext, GatitoContext>();
 builder.Services.AddTransient<IGatitoService, GatitoService>();
 builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
+builder.Services.AddTransient<IMascotaRepository, MascotaRepository>();
 
 //connection context
 builder.Services.AddDbContext<GatitoContext>(option => option.UseSqlServer("Server=localhost,1433; Database=prueba; User ID=SA; Password=<camilo@cristian123>;"));

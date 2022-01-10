@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using Gatitos.Context;
 using Gatitos.Models;
 
@@ -35,12 +36,19 @@ public class PersonaRepository : IPersonaRepository
 
     public List<Persona> ListPersonas()
     {
-        return _gatitoContext.Personas.Select(p => p).ToList();
+        List<Persona> personas = _gatitoContext.Personas.Select(p => p).ToList();
+        foreach (var persna in personas)
+        {
+            persna.Mascotas = _gatitoContext.Mascotas.Select(m => m)
+                .Where(m => m.PersonaId == persna.PersonaId).ToList();
+        }
+
+        return personas;
     }
 
     public Persona Find(int personaId)
     {
-        return _gatitoContext.Personas.Where(p => p.PersonaId == personaId).FirstOrDefault();
+        return _gatitoContext.Personas.Find(personaId);
     }
 
     public Persona Update(Persona persona)
@@ -58,8 +66,7 @@ public class PersonaRepository : IPersonaRepository
             file.CopyTo(target);
             persona.Avatar = target.ToArray();
         }
-        Update(persona);
-        return persona;
+        return Update(persona); 
     }
 
 

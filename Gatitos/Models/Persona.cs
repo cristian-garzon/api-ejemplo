@@ -34,4 +34,6 @@ public class Persona
         }
     }
     
+    public List<Mascota>? Mascotas { get; set; }
+
 }
