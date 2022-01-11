@@ -16,4 +16,5 @@ public interface IMascotaRepository
     public vacuna Update(vacuna vacuna);
     public List<vacuna> ListVacunas();
     public Mascota? AddVacuna(List<vacuna> vacunas, int mascotaId);
+    public Mascota? AddAlbum(Album album, int id);
 }

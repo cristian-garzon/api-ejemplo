@@ -7,8 +7,6 @@ namespace Gatitos.Repository;
 public class MascotaRepository : IMascotaRepository
 {
     private readonly IGatitoContext _gatitoContext;
-
-
     public MascotaRepository(IGatitoContext gatitoContext)
     {
         _gatitoContext = gatitoContext;
@@ -45,6 +43,8 @@ public class MascotaRepository : IMascotaRepository
         if (mascota == null) return null;
         mascota.Vacunas = _gatitoContext.Vacunas.Select(v => v)
             .Where(m => m.MascotaId == mascota.MascotaId).ToList();
+        mascota.Album = _gatitoContext.Mascotas.Select(m => m.Album)
+            .Where(m => m.MascotaId == mascota.MascotaId).FirstOrDefault();
         return mascota;
     }
 
@@ -106,7 +106,16 @@ public class MascotaRepository : IMascotaRepository
         {
             mascota.Vacunas.Add(vacuna);
         }
-
         return Update(mascota);
     }
+
+    public Mascota? AddAlbum(Album album, int id)
+    {
+        Mascota mascota = Find(id);
+        if (mascota == null) return null;
+        mascota.Album = album;
+        return Update(mascota);
+    }
+
+    
 }

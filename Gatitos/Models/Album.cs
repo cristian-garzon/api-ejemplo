@@ -16,7 +16,7 @@ public class Album
     public int MascotaId { get; set; }
     
     [JsonIgnore]
-    public Mascota Mascota { get; set; }
+    public Mascota? Mascota { get; set; }
     
     public List<Galeria>? Galerias { get; set; }
 

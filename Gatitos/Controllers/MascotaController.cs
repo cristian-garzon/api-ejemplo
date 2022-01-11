@@ -114,4 +114,18 @@ public class MascotaController : Controller
         return new ObjectResult(mascota)
             {StatusCode = StatusCodes.Status201Created};
     }
+
+
+    [HttpPut("album/{id}")]
+    public ActionResult<Mascota> AddAlbum([FromBody] Album album, int id)
+    {
+        Mascota? mascota = _mascotaRepository.Find(id);
+        if (mascota == null) return NotFound();
+        if (mascota.Album != null) return BadRequest("the album is already");
+        Mascota? mascotaAlbum = _mascotaRepository.AddAlbum(album, id);
+        return new ObjectResult(mascotaAlbum)
+            {StatusCode = StatusCodes.Status201Created};
+    }
+
+   
 }
