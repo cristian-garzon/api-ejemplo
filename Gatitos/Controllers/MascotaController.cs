@@ -18,7 +18,7 @@ public class MascotaController : Controller
     }
     
     
-    [HttpPost("{id}")]
+    [HttpPut("imagen/{id}")]
     public ActionResult<Persona> UploadImage(int id, IFormFile file)
     {
         if(file.Length < 0) return BadRequest();

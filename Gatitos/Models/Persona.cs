@@ -20,6 +20,7 @@ public class Persona
     [EmailAddress]
     public string Email { get; set; }
     
+    [DataType(DataType.Date)]
     public DateTime Nacimiento { get; set; }
     
     [JsonIgnore]

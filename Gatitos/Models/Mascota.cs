@@ -35,6 +35,8 @@ public class Mascota
     }
     
     public ICollection<vacuna>? Vacunas { get; set; }
+    
+    public Album? Album { get; set; }
 
 
 }

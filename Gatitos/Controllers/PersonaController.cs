@@ -22,13 +22,14 @@ public class PersonaController : Controller
         return new ObjectResult(_personaRepository.AddPersona(persona)) {StatusCode = StatusCodes.Status201Created};
     }
 
-    [HttpPost("{id}")]
+    [HttpPut("imagen/{id}")]
     public ActionResult<Persona> UploadImage(int id, IFormFile? file)
     {
-        if (file == null || file.Length > 0) return BadRequest("error uploading the file");
-        Persona persona = _personaRepository.UploadFile(id, file);
+        if (file == null || file.Length < 0) return BadRequest("error uploading the file");
+        Persona persona = _personaRepository.Find(id); 
         if (persona == null) return NotFound();
-        return new ObjectResult(persona)
+        Persona personaCreada = _personaRepository.UploadFile(id, file);
+        return new ObjectResult(personaCreada)
             {StatusCode = StatusCodes.Status201Created};
     }
 
@@ -78,7 +79,7 @@ public class PersonaController : Controller
     }
 
 
-    [HttpPut("{id}")]
+    [HttpPut("mascota/{id}")]
     public ActionResult AddMascotas([FromBody] List<Mascota> mascotas, int id)
     {
         Persona persona = _personaRepository.Find(id);

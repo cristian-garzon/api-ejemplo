@@ -4,6 +4,7 @@ using Gatitos.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatitos.Migrations
 {
     [DbContext(typeof(GatitoContext))]
-    partial class GatitoContextModelSnapshot : ModelSnapshot
+    [Migration("20220111035339_add-album")]
+    partial class addalbum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,30 +44,6 @@ namespace Gatitos.Migrations
                         .IsUnique();
 
                     b.ToTable("Album");
-                });
-
-            modelBuilder.Entity("Gatitos.Models.Galeria", b =>
-                {
-                    b.Property<int>("GaleriaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GaleriaId"), 1L, 1);
-
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("Foto")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("GaleriaId");
-
-                    b.HasIndex("AlbumId");
-
-                    b.ToTable("Galeria");
                 });
 
             modelBuilder.Entity("Gatitos.Models.Mascota", b =>
@@ -175,17 +153,6 @@ namespace Gatitos.Migrations
                     b.Navigation("Mascota");
                 });
 
-            modelBuilder.Entity("Gatitos.Models.Galeria", b =>
-                {
-                    b.HasOne("Gatitos.Models.Album", "Album")
-                        .WithMany("Galerias")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Album");
-                });
-
             modelBuilder.Entity("Gatitos.Models.Mascota", b =>
                 {
                     b.HasOne("Gatitos.Models.Persona", "Persona")
@@ -206,11 +173,6 @@ namespace Gatitos.Migrations
                         .IsRequired();
 
                     b.Navigation("Mascota");
-                });
-
-            modelBuilder.Entity("Gatitos.Models.Album", b =>
-                {
-                    b.Navigation("Galerias");
                 });
 
             modelBuilder.Entity("Gatitos.Models.Mascota", b =>
